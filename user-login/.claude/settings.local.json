@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s -o /dev/null -w \"GET /: %{http_code} -> %{redirect_url}\\\\n\" http://localhost:3000/)",
+      "Bash(curl -s -o /dev/null -w \"GET /login: %{http_code}\\\\n\" http://localhost:3000/login)",
+      "Bash(curl -s -i -X POST -d \"username=alice&password=secret123\" http://localhost:3000/login)",
+      "Bash(curl *)"
+    ]
+  }
+}
