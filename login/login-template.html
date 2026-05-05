@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login</title>
+
+<!-- ============================================================
+  VIEW — CSS
+  Defines layout and all visual states.
+  JS never writes style="" directly — it only adds/removes
+  the state classes defined here.
+============================================================ -->
+<style>
+
+  /* ── Layout ── */
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: sans-serif;
+    background: #f5f5f5;
+  }
+
+  .card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 32px 28px;
+    width: 100%;
+    max-width: 360px;
+  }
+
+  h1 {
+    font-size: 20px;
+    margin-bottom: 24px;
+  }
+
+  /* ── Form row ── */
+  .form-row {
+    margin-bottom: 16px;
+  }
+
+  /* ── Label ── */
+  .field-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #333;
+  }
+
+  /* ── Input (default / normal state) ── */
+  .field-input {
+    display: block;
+    width: 100%;
+    padding: 9px 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+    box-sizing: border-box;
+  }
+
+  /* ── Error message (hidden by default) ── */
+  .field-error {
+    display: block;
+    font-size: 12px;
+    min-height: 16px;  /* reserve space so layout does not jump */
+    margin-top: 5px;
+    color: transparent; /* JS adds .fail class to make it visible */
+  }
+
+  /* ── Submit button ── */
+  .submit-btn {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+
+  /* ── Footer link ── */
+  .card-footer {
+    margin-top: 20px;
+    font-size: 13px;
+    text-align: center;
+    color: #666;
+  }
+
+  .card-footer a { color: #111; }
+
+  /* ──────────────────────────────────────────────────────────
+     STATE CLASSES
+     Applied by JS directly on .field-input and .field-error.
+     CSS decides what each state looks like.
+  ────────────────────────────────────────────────────────── */
+
+  /* fail: shown when a field fails validation */
+  .field-input.fail  { border-color: #e53e3e; background: #fff5f5; }
+  .field-error.fail  { color: #e53e3e; }
+
+  /* success: shown when a field passes validation */
+  .field-input.success { border-color: #38a169; background: #f0fff4; }
+
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+  MODEL — HTML Elements
+  Input elements hold the user data (.value).
+  data-field on each .form-row is used by JS to locate
+  the row, its input, and its error span in one lookup.
+  No inline handlers (onclick, onchange) anywhere in HTML.
+============================================================ -->
+<div class="card">
+
+  <h1>Log in</h1>
+
+  <form id="login-form" novalidate>
+
+    <div class="form-row" data-field="username">
+      <label class="field-label" for="username">Username</label>
+      <input class="field-input" id="username" type="text" placeholder="Enter username">
+      <span class="field-error"></span>
+    </div>
+
+    <div class="form-row" data-field="password">
+      <label class="field-label" for="password">Password</label>
+      <input class="field-input" id="password" type="password" placeholder="Enter password">
+      <span class="field-error"></span>
+    </div>
+
+    <button class="submit-btn" type="submit">Log in</button>
+
+  </form>
+
+  <p class="card-footer">
+    No account? <a href="signup.html">Sign up</a>
+  </p>
+
+</div>
+
+
+<!-- ============================================================
+  CONTROLLER — JavaScript
+  All event wiring happens here.
+  No inline handlers in HTML. No style="" writes in JS.
+  Only class adds/removes to trigger CSS state rules.
+============================================================ -->
+<script>
+
+  /* ----------------------------------------------------------
+    SECTION 1 — Element accessors
+    Helper functions to locate DOM elements by field name.
+    Use these in every handler instead of repeating
+    document.getElementById / querySelector calls.
+  ---------------------------------------------------------- */
+
+  function getInput(fieldName) {
+    // TODO: Return the <input> element whose id matches fieldName.
+    // Hint: document.getElementById(fieldName)
+  }
+
+  function getErrorSpan(fieldName) {
+    // TODO: Return the .field-error <span> inside the
+    //       .form-row[data-field="fieldName"] container.
+    // Hint: querySelector on the row, then querySelector('.field-error')
+  }
+
+
+  /* ----------------------------------------------------------
+    SECTION 2 — View updaters
+    Functions that change what the user sees.
+    They receive a DOM element and a value; they never
+    query the DOM themselves.
+  ---------------------------------------------------------- */
+
+  function applyInputState(inputElement, state) {
+    // TODO: Remove 'fail' and 'success' classes from inputElement,
+    //       then add the class matching state ('fail' | 'success').
+    //       If state is null, just remove both (normal/reset).
+    // Hint: inputElement.classList.remove(...)
+    //       inputElement.classList.add(state)
+  }
+
+  function applyErrorState(errorSpan, message) {
+    // TODO: Write message into errorSpan.textContent.
+    //       If message is non-empty, add class 'fail' to errorSpan
+    //       so CSS makes the text visible (red).
+    //       If message is empty, remove class 'fail' to hide it.
+  }
+
+
+  /* ----------------------------------------------------------
+    SECTION 3 — Validation rules
+    Pure functions: take a field name and its trimmed value,
+    return an error string if invalid or '' if valid.
+    No DOM access here.
+  ---------------------------------------------------------- */
+
+  function validateField(fieldName, value) {
+    // TODO: Add a rule for 'username':
+    //         - required (empty → 'Username is required.')
+    //         - min 3 chars  (→ 'Username must be at least 3 characters.')
+    //
+    //       Add a rule for 'password':
+    //         - required (empty → 'Password is required.')
+    //         - min 8 chars  (→ 'Password must be at least 8 characters.')
+    //
+    //       Return '' if the value passes all rules for that field.
+  }
+
+
+  /* ----------------------------------------------------------
+    SECTION 4 — Submit handler
+    Runs when the form is submitted.
+    Steps:
+      1. Cancel the default browser form submission.
+      2. Loop over each field name in ['username', 'password'].
+      3. For each field:
+           a. Read the trimmed value from its input element.
+           b. Call validateField to get an error message (or '').
+           c. Call applyInputState with 'fail' or 'success'.
+           d. Call applyErrorState with the message (or '' to clear).
+      4. If all fields are valid, call onSuccess with the values.
+  ---------------------------------------------------------- */
+
+  function handleSubmit(event) {
+    // TODO: Implement the submit handler following the steps above.
+    // Hint: event.preventDefault() to cancel default submission.
+    //       Use getInput / getErrorSpan / applyInputState / applyErrorState.
+    //       Track a formIsValid boolean; set to false on any failure.
+    //       Call onSuccess(username, password) if formIsValid is still true.
+  }
+
+
+  /* ----------------------------------------------------------
+    SECTION 5 — Success action
+    Called only when all fields pass validation.
+  ---------------------------------------------------------- */
+
+  function onSuccess(username, password) {
+    // TODO: Show an alert with the submitted username and password.
+    // Example format: "Username: alice | Password: secret123"
+  }
+
+
+  /* ----------------------------------------------------------
+    SECTION 6 — onload: wire event handlers to elements
+    This runs once the page has fully loaded.
+    All connections between DOM elements and handler functions
+    are made here — not in HTML attributes.
+  ---------------------------------------------------------- */
+
+  window.addEventListener('load', function() {
+
+    // TODO: Get the login form element by its id.
+    //       Attach handleSubmit as the listener for the 'submit' event.
+    // Hint: formElement.addEventListener('submit', handleSubmit)
+
+    // Add more event listeners here as needed, for example:
+    // - 'input' on each field to clear the error as the user types
+    // - 'blur' on each field to validate on focus-out
+
+  });
+
+</script>
+</body>
+</html>
