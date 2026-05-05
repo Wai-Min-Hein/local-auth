@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+<head>
+  <title>Signup</title>
+  <link rel="stylesheet" href="form.css">
+</head>
+
+<body>
+
+<div class="card">
+  <h1>Sign up</h1>
+
+  <form id="signup-form" novalidate>
+
+    <div class="form-row" data-field="displayName">
+      <label class="field-label">Display Name</label>
+      <input id="displayName" class="field-input" type="text" placeholder="Enter your name">
+      <span class="field-error"></span>
+    </div>
+
+    <div class="form-row" data-field="username">
+      <label class="field-label">Email</label>
+      <input id="username" class="field-input" type="text" placeholder="Enter your email">
+      <span class="field-error"></span>
+    </div>
+
+    <div class="form-row" data-field="password">
+      <label class="field-label">Password</label>
+      <input id="password" class="field-input" type="password" placeholder="Enter your password">
+      <span class="field-error"></span>
+    </div>
+
+    <div class="form-row" data-field="confirmPassword">
+      <label class="field-label">Confirm Password</label>
+      <input id="confirmPassword" class="field-input" type="password" placeholder="Confirm your password">
+      <span class="field-error"></span>
+    </div>
+
+    <button class="submit-btn" type="submit">Sign up</button>
+  </form>
+
+  <p class="card-footer">
+    Already have an account? <a href="./sdk-login.html">Log in</a>
+  </p>
+</div>
+
+<script src="form.js"></script>
+
+<script>
+  const fields = [
+    "displayName",
+    "username",
+    "password",
+    "confirmPassword"
+  ];
+
+  document.getElementById("signup-form").addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    blurEnabled = true;
+    attachBlur(fields);
+
+    let ok = true;
+
+    fields.forEach(f => {
+      if (!validateAndRender(f)) ok = false;
+    });
+
+    if (ok) {
+      const email = getInput("username").value.trim();
+      const password = getInput("password").value.trim();
+
+      alert(
+        `Your account has been created successfully!\n\nEmail: ${email}\nPassword: ${password}`
+      );
+    }
+  });
+</script>
+
+</body>
+</html>
