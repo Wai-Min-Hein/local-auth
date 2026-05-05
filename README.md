@@ -1,61 +1,94 @@
 # Solo Features
 
-This repository is shared by all developers. Each developer works on their
-own branch and opens a pull request when their feature is ready. Do not
-commit directly to `main`.
+This repository is shared by all developers. Each developer works on their own branch and opens a pull request when their feature is ready. Do not commit directly to `main`.
+
+---
+
+## Git workflow
+
+### 1. Initialize the repo (new local repo only)
+
+```bash
+git init
+```
+
+### 2. Add files and commit
+
+```bash
+git add */filename
+git commit -m "Description"
+```
+
+### 3. Inspect history
+
+```bash
+git log
+git show [hash]
+```
+
+### 4. Push your branch
+
+```bash
+git push [target repo] [source branch]
+```
+
+### 5. Clone an existing repo
+
+```bash
+git clone [Repo URL]
+```
+
+### 6. Create a feature branch
+
+Branch names should include developer and feature, for example:
+
+```bash
+git checkout -b ttw-login/ttw-signup
+```
+
+### 7. Make changes, commit, and push
+
+```bash
+git add [files]
+git commit -m "Description"
+git push origin [branch name]
+```
 
 ---
 
 ## How to work in this repo
 
-### 1. Clone the repository (first time only)
+1. Clone the repository:
 
 ```bash
 git clone https://github.com/<org>/solo-feat.git
-cd solo-feat
+dot solo-feat
 ```
 
-### 2. Create your branch
-
-Branch names follow this pattern: `feat/<your-name>/<feature-name>`
+2. Create your branch:
 
 ```bash
-git checkout -b feat/alice/login-form
+git checkout -b ttw-login/ttw-signup
 ```
 
-### 3. Build your feature
+3. Build your feature:
 
-Each feature is a single self-contained HTML file.
-Create it inside the folder that matches your assigned task:
+Each feature is a single self-contained HTML file. Create it inside the folder that matches your assigned task.
 
-```
-solo-feat/
-├── 01-login-form/
-│   └── alice.html
-├── 02-signup-form/
-│   └── bob.html
-└── ...
-```
-
-### 4. Commit and push your branch
+4. Commit and push your branch:
 
 ```bash
-git add .
-git commit -m "feat: login form with inline validation"
-git push origin feat/alice/login-form
+git add [your file]
+git commit -m "feat: add login form"
+git push origin ttw-login/ttw-signup
 ```
 
-### 5. Open a pull request
+5. Open a pull request:
 
 * Base branch: `main`
 * Title: `[feat] <your-name> — <feature-name>`
 * Description: what you built and what you tested
 * Request a review from at least one teammate
-
-### 6. Review a teammate's PR
-
-Every developer must review at least one PR per sprint.
-Leave at least two meaningful comments — not just approvals.
 
 ---
 
@@ -63,7 +96,5 @@ Leave at least two meaningful comments — not just approvals.
 
 * **Never commit to `main` directly.** All changes go through a PR.
 * **One feature per branch.** Keep branches small and focused.
-* **Your file, your responsibility.** Name your file with your own name
-  so there are no merge conflicts with teammates working on the same task.
-* **PR must be approved before merge.** At least one teammate approval
-  and a green CI check are required.
+* **Your file, your responsibility.** Name your file with your own name so there are no merge conflicts.
+* **PR must be approved before merge.** At least one teammate approval is required.
