@@ -1,0 +1,135 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-family: sans-serif;
+
+  /* dark elegant background */
+  background: linear-gradient(135deg, #0a1a2f, #102a43, #0b3a66);
+}
+
+/* GLASS CARD */
+.card {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 14px;
+  padding: 32px;
+  padding-right: 48px;
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+  color: #fff;
+}
+
+/* TITLE */
+h1 {
+  margin-bottom: 20px;
+  color: #e6f0ff;
+  letter-spacing: 0.5px;
+}
+
+/* FORM */
+.form-row {
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.field-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #cfe3ff;
+}
+
+/* INPUT */
+.field-input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+
+  outline: none;
+  transition: 0.2s ease;
+}
+
+/* focus effect */
+.field-input:focus {
+  border-color: #4da3ff;
+  box-shadow: 0 0 10px rgba(77, 163, 255, 0.4);
+}
+
+/* placeholder */
+.field-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ERROR TEXT */
+.field-error {
+  font-size: 12px;
+  min-height: 16px;
+  color: transparent;
+}
+
+/* BUTTON */
+.submit-btn {
+  width: 100%;
+  padding: 11px;
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 10px;
+
+  font-weight: 600;
+  letter-spacing: 0.5px;
+
+  transition: 0.2s ease;
+}
+
+.submit-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* STATES */
+.field-input.fail {
+  border-color: #ff4d4d;
+  box-shadow: 0 0 8px rgba(255, 77, 77, 0.3);
+}
+
+.field-error.fail {
+  color: #ff6b6b;
+}
+
+.field-input.success {
+  border-color: #4cd137;
+  box-shadow: 0 0 8px rgba(76, 209, 55, 0.3);
+}
+
+/* FOOTER */
+.card-footer {
+  margin-top: 20px;
+  font-size: 13px;
+  text-align: center;
+  color: #cfe3ff;
+}
+
+.card-footer a {
+  color: #4da3ff;
+  text-decoration: none;
+}
+
+.card-footer a:hover {
+  text-decoration: underline;
+}
