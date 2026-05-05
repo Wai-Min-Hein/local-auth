@@ -5,7 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Login</title>
 
-
+<!-- ============================================================
+  VIEW — CSS
+  Defines layout and all visual states.
+  JS never writes style="" directly — it only adds/removes
+  the state classes defined here.
+============================================================ -->
 <style>
 
   /* ── Layout ── */
@@ -108,6 +113,13 @@
 </head>
 <body>
 
+<!-- ============================================================
+  MODEL — HTML Elements
+  Input elements hold the user data (.value).
+  data-field on each .form-row is used by JS to locate
+  the row, its input, and its error span in one lookup.
+  No inline handlers (onclick, onchange) anywhere in HTML.
+============================================================ -->
 <div class="card">
 
   <h1>Log in</h1>
