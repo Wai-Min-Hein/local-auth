@@ -97,4 +97,4 @@ git push origin ttw-login/ttw-signup
 * **Never commit to `main` directly.** All changes go through a PR.
 * **One feature per branch.** Keep branches small and focused.
 * **Your file, your responsibility.** Name your file with your own name so there are no merge conflicts.
-* **PR must be approved before merge.** At least one teammate approval is required.
+* **NEVER MERGE PR TO MAIN BRANCH**.
