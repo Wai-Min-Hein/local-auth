@@ -8,46 +8,44 @@ function getInput(fieldName) {
 
 function getErrorSpan(fieldName) {
   var row = getRow(fieldName);
-  return row ? row.querySelector('.field-error') : null;
+  return row ? row.querySelector(".field-error") : null;
 }
 
 function applyInputState(inputElement, state) {
-  if (!inputElement) {
+  if(!inputElement) {
     return;
   }
 
-  inputElement.classList.remove('fail', 'success');
-  if (state) {
+  inputElement.classList.remove("fail", "success");
+  if(state) {
     inputElement.classList.add(state);
   }
 }
 
 function applyErrorState(errorElement, message) {
-  if (!errorElement) {
+  if(!errorElement) {
     return;
   }
 
-  errorElement.textContent = message || '';
-  errorElement.classList.toggle('fail', Boolean(message));
+  errorElement.textContent = message || "";
+  if(message) {
+    errorElement.classList.add("fail");
+  } else {
+    errorElement.classList.remove("fail");
+  }
 }
 
 function setFieldState(fieldName, message) {
   var inputElement = getInput(fieldName);
   var errorElement = getErrorSpan(fieldName);
-  var state = message ? 'fail' : 'success';
 
-  applyInputState(inputElement, state);
+  applyInputState(inputElement, message ? "fail" : "success");
   applyErrorState(errorElement, message);
-}
-
-function clearFieldState(fieldName) {
-  applyInputState(getInput(fieldName), null);
-  applyErrorState(getErrorSpan(fieldName), '');
 }
 
 function readTrimmedValue(fieldName) {
   var inputElement = getInput(fieldName);
-  return inputElement ? inputElement.value.trim() : '';
+  return inputElement ? inputElement.value.trim() : "";
 }
 
 function collectValues(fieldNames) {
@@ -57,73 +55,69 @@ function collectValues(fieldNames) {
   }, {});
 }
 
-function validateField(fieldName, value, allValues) {
-  if (fieldName === 'displayName') {
-    if (!value) {
-      return 'Display name is required.';
+function validateField(fieldName, value) {
+  if(fieldName === "displayName") {
+    if(value.length === 0) {
+      return "Display name is required.";
+    } else if(value.length < 3) {
+      return "Display name must be at least 3 characters.";
+    } else if(!/^[A-Za-z0-9 '-]+$/.test(value)) {
+      return "Display name contains invalid characters.";
     }
-    if (value.length < 3) {
-      return 'Display name must be at least 3 characters.';
+  } else if(fieldName === "username") {
+    if(value.length === 0) {
+      return "Username is required.";
+    } else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+      return "Username must be a valid email address.";
     }
-    return '';
+  } else if(fieldName === "password") {
+    if(value.length === 0) {
+      return "Password is required.";
+    } else if(value.length < 8) {
+      return "Password must be at least 8 characters.";
+    } else if(!/[A-Z]/.test(value)) {
+      return "Password must contain at least one uppercase letter.";
+    } else if(!/[a-z]/.test(value)) {
+      return "Password must contain at least one lowercase letter.";
+    } else if(!/[0-9]/.test(value)) {
+      return "Password must contain at least one number.";
+    } else if(!/[!@#$%^&*]/.test(value)) {
+      return "Password must contain at least one special character.";
+    }
   }
 
-  if (fieldName === 'username') {
-    if (!value) {
-      return 'Username is required.';
-    }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-      return 'Enter a valid email address.';
-    }
-    return '';
-  }
-
-  if (fieldName === 'password') {
-    if (!value) {
-      return 'Password is required.';
-    }
-    if (value.length < 8) {
-      return 'Password must be at least 8 characters.';
-    }
-    return '';
-  }
-
-  if (fieldName === 'confirmPassword') {
-    if (!value) {
-      return 'Please confirm your password.';
-    }
-    if (value !== allValues.password) {
-      return 'Passwords do not match.';
-    }
-    return '';
-  }
-
-  return '';
+  return "";
 }
 
-function validateFields(fieldNames, values) {
+function validateAndApplyField(fieldName) {
+  var message = validateField(fieldName, readTrimmedValue(fieldName));
+  setFieldState(fieldName, message);
+  return !message;
+}
+
+function validateFields(fieldNames) {
   var formIsValid = true;
 
   fieldNames.forEach(function(fieldName) {
-    var message = validateField(fieldName, values[fieldName], values);
-    if (message) {
+    if(!validateAndApplyField(fieldName)) {
       formIsValid = false;
     }
-    setFieldState(fieldName, message);
   });
 
   return formIsValid;
 }
 
-function attachClearOnInput(fieldNames) {
+function attachBlurValidation(fieldNames) {
   fieldNames.forEach(function(fieldName) {
     var inputElement = getInput(fieldName);
-    if (!inputElement) {
+
+    if(!inputElement || inputElement.blurValidationAttached) {
       return;
     }
 
-    inputElement.addEventListener('input', function() {
-      clearFieldState(fieldName);
+    inputElement.addEventListener("blur", function() {
+      validateAndApplyField(fieldName);
     });
+    inputElement.blurValidationAttached = true;
   });
 }

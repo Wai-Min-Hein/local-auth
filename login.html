@@ -5,253 +5,80 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Log In</title>
 <link rel="stylesheet" href="forms.css">
-<style>
-  body {
-    margin: 0;
-    min-height: 100vh;
-    padding: 24px 16px;
-    box-sizing: border-box;
-    display: grid;
-    place-items: center;
-    background: #f5f5f5;
-    font-family: Arial, sans-serif;
-  }
-
-  .page {
-    width: min(920px, 100%);
-    display: grid;
-    gap: 20px;
-  }
-
-  .hint-panel,
-  .card {
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-  }
-
-  .hint-panel {
-    padding: 20px 22px;
-  }
-
-  .hint-panel h2 {
-    margin: 0 0 12px;
-    font-size: 18px;
-  }
-
-  .hint-panel ol {
-    margin: 0;
-    padding-left: 20px;
-    line-height: 1.6;
-  }
-
-  .card {
-    width: 100%;
-    max-width: 400px;
-    padding: 30px 26px;
-    justify-self: center;
-  }
-
-  h1 {
-    margin: 0 0 24px;
-    font-size: 22px;
-  }
-
-  .form-row {
-    margin-bottom: 16px;
-  }
-
-  .field-label {
-    display: block;
-    margin-bottom: 6px;
-    font-size: 13px;
-    font-weight: 600;
-    color: #333;
-  }
-
-  .field-input {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 10px 12px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 14px;
-  }
-
-  .field-error {
-    display: block;
-    min-height: 16px;
-    margin-top: 5px;
-    font-size: 12px;
-    color: transparent;
-  }
-
-  .submit-btn {
-    width: 100%;
-    margin-top: 8px;
-    padding: 10px;
-    border: 0;
-    border-radius: 6px;
-    background: #111;
-    color: #fff;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-  }
-
-  .card-footer {
-    margin: 20px 0 0;
-    text-align: center;
-    font-size: 13px;
-    color: #666;
-  }
-
-  .field-input.fail {
-    border-color: #e53e3e;
-    background: #fff5f5;
-  }
-
-  .field-input.success {
-    border-color: #38a169;
-    background: #f0fff4;
-  }
-
-  .field-error.fail {
-    color: #e53e3e;
-  }
-</style>
 </head>
 <body>
-<main class="page">
-  <section class="hint-panel" aria-label="Learner hints">
-    <h2>Login Template Steps</h2>
-    <ol>
-      <li>Reuse the same login validation rules from earlier lessons before checking credentials.</li>
-      <li>Call <code>findUser(username)</code> after the form is already valid.</li>
-      <li>If no user exists, show <code>User not found.</code> on the username field.</li>
-      <li>If the password does not match, show <code>Incorrect password.</code> on the password field.</li>
-      <li>If both match, call <code>saveSession(user)</code> and redirect to <code>home.html</code>.</li>
-    </ol>
-  </section>
 
-  <section class="card">
-    <h1>Log in</h1>
+<section class="card">
+  <h1>Log in</h1>
 
-    <form id="login-form" novalidate>
-      <div class="form-row" data-field="username">
-        <label class="field-label" for="username">Username</label>
-        <input class="field-input" id="username" type="email" placeholder="Enter email">
-        <span class="field-error"></span>
-      </div>
+  <form id="login-form" novalidate>
+    <div class="form-row" data-field="username">
+      <label class="field-label" for="username">Username</label>
+      <input class="field-input" id="username" type="email" placeholder="Enter email">
+      <span class="field-error"></span>
+    </div>
 
-      <div class="form-row" data-field="password">
-        <label class="field-label" for="password">Password</label>
-        <input class="field-input" id="password" type="password" placeholder="Enter password">
-        <span class="field-error"></span>
-      </div>
+    <div class="form-row" data-field="password">
+      <label class="field-label" for="password">Password</label>
+      <input class="field-input" id="password" type="password" placeholder="Enter password">
+      <span class="field-error"></span>
+    </div>
 
-      <button class="submit-btn" type="submit">Log in</button>
-    </form>
+    <button class="submit-btn" type="submit">Log in</button>
+  </form>
 
-    <p class="card-footer">
-      Don't have an account? <a href="signup.html">Sign up</a>
-    </p>
-  </section>
-</main>
+  <p class="card-footer">
+    Don't have an account? <a href="signup.html">Sign up</a>
+  </p>
+</section>
 
 <script src="forms.js"></script>
 <script src="store.js"></script>
 <script>
-  /*
-    STEP 1:
-    Shared DOM and validation helpers now live in forms.js.
-    This page only needs the login-specific auth flow.
-  */
+  var fieldNames = ["username", "password"];
 
   function getFormValues() {
-    // TODO:
-    // Use the shared forms.js helper to collect:
-    // - username
-    // - password
-    //
-    // Hint:
-    // return collectValues(['username', 'password']);
+    return collectValues(fieldNames);
   }
 
-  /*
-    STEP 2:
-    Reuse the lesson validation helpers from forms.js.
-    Do not mix localStorage checks into the normal field validation pass.
-  */
-
-  function validateLoginForm(values) {
-    // TODO:
-    // Reuse the shared validation helper from forms.js for:
-    // - username
-    // - password
-    //
-    // Hint:
-    // return validateFields(['username', 'password'], values);
+  function validateLoginForm() {
+    return validateFields(fieldNames);
   }
-
-  /*
-    STEP 3:
-    Authentication flow:
-    1. preventDefault()
-    2. read values
-    3. validate the form
-    4. call findUser(values.username)
-    5. show 'User not found.' if null
-    6. show 'Incorrect password.' if password mismatches
-    7. call saveSession(user) and redirect to home.html on success
-  */
 
   function handleSubmit(event) {
-    // TODO:
-    // Implement the login flow in this exact order:
-    // 1. Call event.preventDefault().
-    // 2. Read form values with getFormValues().
-    // 3. Validate them with validateLoginForm(values).
-    //    If validation fails, stop here.
-    // 4. Look up the user with:
-    //      findUser(values.username)
-    // 5. If no user is found:
-    //      show 'User not found.' on the username field
-    //      using the shared state helper from forms.js.
-    //      Also clear any password error state if needed.
-    // 6. If the user exists but the password does not match:
-    //      show 'Incorrect password.' on the password field.
-    // 7. If username and password are correct:
-    //      call saveSession(user)
-    // 8. Redirect to home.html.
+    event.preventDefault();
+    attachBlurValidation(fieldNames);
+
+    if(!validateLoginForm()) {
+      return;
+    }
+
+    var values = getFormValues();
+    var user = findUser(values.username);
+
+    if(!user) {
+      setFieldState("username", "User not found.");
+      setFieldState("password", "");
+      return;
+    }
+
+    if(user.password !== values.password) {
+      setFieldState("password", "Incorrect password.");
+      return;
+    }
+
+    saveSession(user);
+    window.location.href = "home.html";
   }
 
-  /*
-    STEP 4:
-    Wire the submit handler after page load.
-    Optional extension:
-    if getSession() already exists, redirect straight to home.html.
-  */
+  window.addEventListener("load", function() {
+    if(getSession()) {
+      window.location.href = "home.html";
+      return;
+    }
 
-  window.addEventListener('load', function() {
-    // TODO:
-    // 1. Optional guard:
-    //    if a session already exists, redirect directly to home.html.
-    //    Shared helper to check:
-    //    getSession()
-    // 2. Optionally call the shared input-clear helper for:
-    //    - username
-    //    - password
-    // 3. Get the form by id 'login-form'.
-    // 4. Attach handleSubmit to the submit event.
-    //
-    // Hint:
-    // if (getSession()) {
-    //   window.location.href = 'home.html';
-    //   return;
-    // }
-    // attachClearOnInput(['username', 'password']);
-    // document.getElementById('login-form').addEventListener('submit', handleSubmit);
+    var formElement = document.getElementById("login-form");
+    formElement.addEventListener("submit", handleSubmit);
   });
 </script>
 </body>
