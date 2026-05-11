@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LocalStorage Lab</title>
+<style>
+  :root {
+    --bg: #f4f1ea;
+    --panel: #fffdf8;
+    --panel-strong: #fff;
+    --ink: #1f2933;
+    --muted: #5b6670;
+    --line: #d8d1c3;
+    --accent: #0f766e;
+    --accent-soft: #dff7f4;
+    --warn: #92400e;
+    --warn-soft: #fef3c7;
+    --shadow: 0 16px 40px rgba(31, 41, 51, 0.08);
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    color: var(--ink);
+    background:
+      radial-gradient(circle at top left, rgba(15, 118, 110, 0.08), transparent 28%),
+      linear-gradient(180deg, #f7f4ee 0%, var(--bg) 100%);
+  }
+
+  .page {
+    width: min(1120px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 32px 0 56px;
+    display: grid;
+    gap: 24px;
+  }
+
+  .hero,
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .hero {
+    padding: 30px 28px;
+    display: grid;
+    gap: 18px;
+  }
+
+  .eyebrow {
+    margin: 0;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  h1,
+  h2,
+  h3 {
+    margin: 0;
+    font-weight: 700;
+    line-height: 1.15;
+  }
+
+  h1 {
+    font-size: clamp(32px, 5vw, 54px);
+    max-width: 12ch;
+  }
+
+  .hero p,
+  .panel p,
+  .panel li {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--muted);
+  }
+
+  .hero-grid,
+  .two-col,
+  .lab-grid {
+    display: grid;
+    gap: 20px;
+  }
+
+  .hero-grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+
+  .mini-card {
+    padding: 18px;
+    border-radius: 14px;
+    background: var(--panel-strong);
+    border: 1px solid var(--line);
+  }
+
+  .mini-card strong {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--ink);
+  }
+
+  .panel {
+    padding: 26px 24px;
+  }
+
+  .two-col {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+
+  .callout {
+    padding: 16px 18px;
+    border-radius: 14px;
+    background: var(--accent-soft);
+    border: 1px solid rgba(15, 118, 110, 0.18);
+    color: #0b4f4a;
+  }
+
+  .warning {
+    background: var(--warn-soft);
+    border: 1px solid rgba(146, 64, 14, 0.18);
+    color: var(--warn);
+  }
+
+  pre {
+    margin: 0;
+    padding: 16px;
+    overflow: auto;
+    border-radius: 14px;
+    background: #1f2933;
+    color: #f8fafc;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  code {
+    font-family: Consolas, "Courier New", monospace;
+  }
+
+  ol,
+  ul {
+    margin: 12px 0 0;
+    padding-left: 22px;
+  }
+
+  .comparison {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+  }
+
+  .comparison th,
+  .comparison td {
+    padding: 12px 10px;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+
+  .comparison th {
+    color: var(--ink);
+  }
+
+  .lab-grid {
+    grid-template-columns: minmax(280px, 360px) 1fr;
+    align-items: start;
+  }
+
+  .controls,
+  .results {
+    padding: 18px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--panel-strong);
+  }
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  input,
+  textarea {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid #b9c0c7;
+    border-radius: 10px;
+    font: inherit;
+    color: var(--ink);
+    background: #fff;
+  }
+
+  textarea {
+    min-height: 110px;
+    resize: vertical;
+  }
+
+  .field {
+    margin-bottom: 14px;
+  }
+
+  .button-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 14px;
+  }
+
+  button {
+    padding: 10px 14px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--ink);
+    color: #fff;
+    cursor: pointer;
+    font: inherit;
+  }
+
+  button.alt {
+    background: var(--accent);
+  }
+
+  button.ghost {
+    background: #e5e7eb;
+    color: var(--ink);
+  }
+
+  .results h3 {
+    margin-bottom: 12px;
+  }
+
+  .data-box {
+    margin-top: 10px;
+    padding: 14px;
+    border-radius: 12px;
+    background: #f8fafc;
+    border: 1px solid #dbe3ea;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 14px;
+    min-height: 92px;
+  }
+
+  .steps {
+    display: grid;
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .step {
+    padding: 14px 16px;
+    border-radius: 12px;
+    background: #fcfaf5;
+    border: 1px solid var(--line);
+  }
+
+  .step strong {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--ink);
+  }
+
+  @media (max-width: 840px) {
+    .lab-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+<main class="page">
+  <section class="hero">
+    <p class="eyebrow">Browser Storage Lab</p>
+    <h1>Learn how localStorage really behaves</h1>
+    <p>
+      This page explains what <code>localStorage</code> and <code>sessionStorage</code> are, how long they live,
+      where they are useful, and why this auth-localstore feature uses both in different ways. It also includes
+      a lab so you can test browser storage behavior yourself instead of just reading about it.
+    </p>
+
+    <div class="hero-grid">
+      <div class="mini-card">
+        <strong>What they store</strong>
+        <span>Small key-value strings inside the browser for one specific site origin.</span>
+      </div>
+      <div class="mini-card">
+        <strong>Different lifetimes</strong>
+        <span><code>localStorage</code> persists across tab close. <code>sessionStorage</code> is meant for the current tab session.</span>
+      </div>
+      <div class="mini-card">
+        <strong>When they end</strong>
+        <span><code>localStorage</code> ends when cleared. <code>sessionStorage</code> ends when the tab session ends.</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>What Is localStorage?</h2>
+    <div class="two-col">
+      <div>
+        <p>
+          <code>localStorage</code> is a built-in browser storage area for saving small pieces of data as
+          key-value pairs. Both the key and the value are stored as strings.
+        </p>
+        <p>
+          Each website origin gets its own storage bucket. That means one site cannot read another site's
+          local storage values.
+        </p>
+      </div>
+      <div>
+<pre><code>localStorage.setItem('theme', 'dark');
+
+const theme = localStorage.getItem('theme');
+// 'dark'
+
+localStorage.removeItem('theme');</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Lifetime: The Key Idea</h2>
+    <div class="two-col">
+      <div class="callout">
+        <strong>localStorage survives tab close.</strong>
+        <p>
+          If you save data in one tab, close that tab, then open the same page again later, the data should
+          still be there.
+        </p>
+      </div>
+      <div class="callout warning">
+        <strong>sessionStorage does not behave the same way.</strong>
+        <p>
+          <code>sessionStorage</code> is tied to the current browser tab or window session. Once that tab is
+          fully closed, the session data is usually gone.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>localStorage vs sessionStorage</h2>
+    <table class="comparison">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>localStorage</th>
+          <th>sessionStorage</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Lifetime</td>
+          <td>Persistent until removed or cleared</td>
+          <td>Cleared when the tab/window session ends</td>
+        </tr>
+        <tr>
+          <td>Survives refresh</td>
+          <td>Yes</td>
+          <td>Yes</td>
+        </tr>
+        <tr>
+          <td>Survives tab close</td>
+          <td>Yes</td>
+          <td>No, usually not</td>
+        </tr>
+        <tr>
+          <td>Good for</td>
+          <td>Saved preferences, cached small app data, simple persistent demos</td>
+          <td>Temporary logged-in tab state, current session flow, one-tab interactions</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="panel">
+    <h2>Real-World Usage Examples</h2>
+    <div class="two-col">
+      <div>
+        <h3>Good fits for localStorage</h3>
+        <ul>
+          <li>Remembering theme choice like light mode or dark mode.</li>
+          <li>Saving draft text in a notes app.</li>
+          <li>Persisting onboarding completion flags.</li>
+          <li>Small demo apps where a database does not exist yet.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Bad fits for localStorage</h3>
+        <ul>
+          <li>Highly sensitive secrets such as real auth tokens in production.</li>
+          <li>Large files or large datasets.</li>
+          <li>Data that must be shared securely across devices.</li>
+          <li>Anything that requires server trust.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>How This Feature Uses Browser Storage</h2>
+    <div class="two-col">
+      <div>
+        <p>
+          In the current auth-localstore feature, registered users are saved in
+          <code>localStorage</code> under the key <code>users</code>. That makes sense because registered users
+          should still exist after refresh, navigation, tab close, and browser restart.
+        </p>
+<pre><code>[
+  {
+    "username": "alice@example.com",
+    "displayName": "Alice",
+    "password": "Abc$1234"
+  }
+]</code></pre>
+      </div>
+      <div>
+        <p>
+          The active logged-in user is saved in <code>sessionStorage</code> under the key
+          <code>currentUser</code>. That matches the feature spec because the login session should end when the
+          user closes the browser tab.
+        </p>
+<pre><code>{
+  "username": "alice@example.com",
+  "displayName": "Alice"
+}</code></pre>
+      </div>
+    </div>
+    <div class="callout" style="margin-top: 18px;">
+      <strong>Why the split matters</strong>
+      <p>
+        Persistent account list in <code>localStorage</code>, temporary active session in
+        <code>sessionStorage</code>. That is the exact storage design used by this lesson's auth flow.
+      </p>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Interactive Lab</h2>
+    <p>
+      Use this mini lab to create records in both <code>localStorage</code> and <code>sessionStorage</code>,
+      inspect them, reload the page, close the tab, and compare what survives.
+    </p>
+
+    <div class="lab-grid">
+      <div class="controls">
+        <div class="field">
+          <label for="storage-type">Storage type</label>
+          <select id="storage-type">
+            <option value="localStorage">localStorage</option>
+            <option value="sessionStorage">sessionStorage</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="lab-key">Storage key</label>
+          <input id="lab-key" type="text" value="labNote">
+        </div>
+
+        <div class="field">
+          <label for="lab-value">Storage value</label>
+          <textarea id="lab-value">This value should still exist after I close and reopen the tab.</textarea>
+        </div>
+
+        <div class="button-row">
+          <button type="button" id="save-btn">Save to selected storage</button>
+          <button type="button" id="load-btn" class="alt">Load from selected storage</button>
+          <button type="button" id="remove-btn" class="ghost">Remove key</button>
+          <button type="button" id="clear-lab-btn" class="ghost">Clear lab keys in both</button>
+        </div>
+      </div>
+
+      <div class="results">
+        <h3>Current result</h3>
+        <p>The box below shows the current value loaded from the selected storage type and key.</p>
+        <div id="lab-output" class="data-box">Nothing loaded yet.</div>
+
+        <div class="steps">
+          <div class="step">
+            <strong>Experiment 1: Refresh test for both</strong>
+            Save one value in <em>localStorage</em> and another in <em>sessionStorage</em>. Refresh the page, then load both again.
+            Both values should still be there after refresh.
+          </div>
+          <div class="step">
+            <strong>Experiment 2: Close-tab lifetime comparison</strong>
+            Save one value in <em>localStorage</em> and one in <em>sessionStorage</em>. Completely close this tab,
+            then open the same page again. The localStorage value should still exist. The sessionStorage value should be gone.
+          </div>
+          <div class="step">
+            <strong>Experiment 3: Compare with the feature</strong>
+            Think about the auth feature: registered users should remain available tomorrow, but the current login
+            session should not. That is why the feature saves users in localStorage and the active session in sessionStorage.
+          </div>
+          <div class="step">
+            <strong>Experiment 4: Remove and verify</strong>
+            Press <em>Remove key</em>, then load again. The value should be gone because code explicitly removed it.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Detailed Instructions for Testing Lifetime</h2>
+    <ol>
+      <li>Select <code>localStorage</code>, enter a key such as <code>labNote</code>, then save a value.</li>
+      <li>Switch to <code>sessionStorage</code>, use a different key such as <code>labSession</code>, then save another value.</li>
+      <li>Load both values again and confirm both exist.</li>
+      <li>Refresh the page and load both again. Both should still exist after refresh.</li>
+      <li>Now fully close this tab.</li>
+      <li>Open the same page again in a new tab.</li>
+      <li>Load the <code>localStorage</code> key. It should still exist.</li>
+      <li>Load the <code>sessionStorage</code> key. It should now be missing.</li>
+      <li>That proves localStorage survives tab close, while sessionStorage is limited to the tab session.</li>
+      <li>Finally, click <strong>Remove key</strong> or <strong>Clear lab keys in both</strong>, then load again to verify explicit removal.</li>
+    </ol>
+  </section>
+</main>
+
+<script>
+  function getSelectedStorage() {
+    var storageType = document.getElementById('storage-type').value;
+    return window[storageType];
+  }
+
+  function getSelectedStorageName() {
+    return document.getElementById('storage-type').value;
+  }
+
+  function getKey() {
+    return document.getElementById('lab-key').value.trim();
+  }
+
+  function getValue() {
+    return document.getElementById('lab-value').value;
+  }
+
+  function setOutput(message) {
+    document.getElementById('lab-output').textContent = message;
+  }
+
+  function saveValue() {
+    var key = getKey();
+    var storage = getSelectedStorage();
+    var storageName = getSelectedStorageName();
+
+    if (!key) {
+      setOutput('Enter a key before saving.');
+      return;
+    }
+
+    storage.setItem(key, getValue());
+    setOutput('Saved key "' + key + '" to ' + storageName + '.\n\nStored value:\n' + getValue());
+  }
+
+  function loadValue() {
+    var key = getKey();
+    var storage = getSelectedStorage();
+    var storageName = getSelectedStorageName();
+    var value;
+
+    if (!key) {
+      setOutput('Enter a key before loading.');
+      return;
+    }
+
+    value = storage.getItem(key);
+    if (value === null) {
+      setOutput('No ' + storageName + ' value exists for key "' + key + '".');
+      return;
+    }
+
+    setOutput('Loaded key "' + key + '" from ' + storageName + '.\n\nStored value:\n' + value);
+  }
+
+  function removeValue() {
+    var key = getKey();
+    var storage = getSelectedStorage();
+    var storageName = getSelectedStorageName();
+
+    if (!key) {
+      setOutput('Enter a key before removing.');
+      return;
+    }
+
+    storage.removeItem(key);
+    setOutput('Removed key "' + key + '" from ' + storageName + '.');
+  }
+
+  function clearLabKeys() {
+    var knownKeys = ['labNote', 'labProfile', 'labExample', 'labSession'];
+
+    knownKeys.forEach(function(key) {
+      localStorage.removeItem(key);
+      sessionStorage.removeItem(key);
+    });
+
+    setOutput('Cleared the sample lab keys from both localStorage and sessionStorage: ' + knownKeys.join(', '));
+  }
+
+  window.addEventListener('load', function() {
+    document.getElementById('save-btn').addEventListener('click', saveValue);
+    document.getElementById('load-btn').addEventListener('click', loadValue);
+    document.getElementById('remove-btn').addEventListener('click', removeValue);
+    document.getElementById('clear-lab-btn').addEventListener('click', clearLabKeys);
+  });
+</script>
+</body>
+</html>
