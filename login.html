@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Log In</title>
+<link rel="stylesheet" href="forms.css">
+</head>
+<body>
+
+<section class="card">
+  <h1>Log in</h1>
+
+  <form id="login-form" novalidate>
+    <div class="form-row" data-field="username">
+      <label class="field-label" for="username">Username</label>
+      <input class="field-input" id="username" type="email" placeholder="Enter email">
+      <span class="field-error"></span>
+    </div>
+
+    <div class="form-row" data-field="password">
+      <label class="field-label" for="password">Password</label>
+      <input class="field-input" id="password" type="password" placeholder="Enter password">
+      <span class="field-error"></span>
+    </div>
+
+    <button class="submit-btn" type="submit">Log in</button>
+  </form>
+
+  <p class="card-footer">
+    Don't have an account? <a href="signup.html">Sign up</a>
+  </p>
+</section>
+
+<script src="forms.js"></script>
+<script src="store.js"></script>
+<script>
+  var fieldNames = ["username", "password"];
+
+  function getFormValues() {
+    return collectValues(fieldNames);
+  }
+
+  function validateLoginForm() {
+    return validateFields(fieldNames);
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    attachBlurValidation(fieldNames);
+
+    if(!validateLoginForm()) {
+      return;
+    }
+
+    var values = getFormValues();
+    var user = findUser(values.username);
+
+    if(!user) {
+      setFieldState("username", "User not found.");
+      setFieldState("password", "");
+      return;
+    }
+
+    if(user.password !== values.password) {
+      setFieldState("password", "Incorrect password.");
+      return;
+    }
+
+    saveSession(user);
+    window.location.href = "index.html";
+  }
+
+  window.addEventListener("load", function() {
+    if(getSession()) {
+      window.location.href = "index.html";
+      return;
+    }
+
+    var formElement = document.getElementById("login-form");
+    formElement.addEventListener("submit", handleSubmit);
+  });
+</script>
+</body>
+</html>

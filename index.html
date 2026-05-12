@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home</title>
+<link rel="stylesheet" href="forms.css">
+</head>
+<body>
+
+<section class="home-card">
+  <h1 id="welcome-message">Welcome</h1>
+  <p>You are signed in for this browser tab.</p>
+  <button id="logout-btn" class="action-btn" type="button">Log out</button>
+</section>
+
+<script src="store.js"></script>
+<script>
+  function redirectToLogin() {
+    window.location.href = "login.html";
+  }
+
+  function renderWelcome(user) {
+    document.getElementById("welcome-message").textContent = "Welcome, " + user.displayName;
+  }
+
+  function handleLogout() {
+    clearSession();
+    redirectToLogin();
+  }
+
+  window.addEventListener("load", function() {
+    var user = getSession();
+
+    if(!user) {
+      redirectToLogin();
+      return;
+    }
+
+    renderWelcome(user);
+    document.getElementById("logout-btn").addEventListener("click", handleLogout);
+  });
+</script>
+</body>
+</html>
