@@ -45,7 +45,7 @@
     return validateFields(fieldNames);
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
     attachBlurValidation(fieldNames);
 
@@ -62,7 +62,9 @@
       return;
     }
 
-    if(user.password !== values.password) {
+    var submittedHash = await hashPassword(values.password, user.salt);
+
+    if(submittedHash !== user.hash) {
       setFieldState("password", "Incorrect password.");
       return;
     }
