@@ -61,12 +61,12 @@
 
     var values = getFormValues();
 
-    if(findUser(values.username)) {
+    if(getUser(values.username)) {
       setFieldState("username", "Username already taken.");
       return;
     }
 
-    await addUser(values.displayName, values.username, values.password);
+    await setUser(values.displayName, values.username, values.password);
     window.location.href = "login.html";
   }
 

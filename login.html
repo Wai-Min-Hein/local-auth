@@ -54,7 +54,7 @@
     }
 
     var values = getFormValues();
-    var user = findUser(values.username);
+    var user = getUser(values.username);
 
     if(!user) {
       setFieldState("username", "User not found.");

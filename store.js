@@ -1,15 +1,6 @@
-function getUsers() {
-  return JSON.parse(sessionStorage.getItem('users') || '[]');
-}
-
-function saveUsers(users) {
-  sessionStorage.setItem('users', JSON.stringify(users));
-}
-
-function findUser(username) {
-  return getUsers().find(function(user) {
-    return user.username === username;
-  }) || null;
+function getUser(username) {
+  var raw = localStorage.getItem('users/' + username);
+  return raw ? JSON.parse(raw) : null;
 }
 
 function bytesToHex(bytes) {
@@ -31,18 +22,18 @@ async function hashPassword(password, salt) {
   return bytesToHex(new Uint8Array(hashBuffer));
 }
 
-async function addUser(displayName, username, password) {
-  var users = getUsers();
+async function setUser(displayName, username, password) {
   var salt = createSalt();
   var hash = await hashPassword(password, salt);
 
-  users.push({
+  var user = {
     displayName: displayName,
     username: username,
     salt: salt,
     hash: hash
-  });
-  saveUsers(users);
+  };
+
+  localStorage.setItem('users/' + username, JSON.stringify(user));
 }
 
 function getSession() {
